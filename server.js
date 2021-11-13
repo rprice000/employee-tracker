@@ -25,7 +25,7 @@ const db = mysql.createConnection({
   const accessEmployeeTracker = () => {
     inquirer.prompt({
         message: 'From Here You Can View, Add, or Update Employee Data.  Select Exit If You Need to Quit The Application.',
-        name: 'menu',
+        name: 'startData',
         type: 'list',
         choices: [ 
           'View All Departments',
