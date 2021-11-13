@@ -3,6 +3,7 @@ const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 
+
 const PORT = process.env.PORT || 3001;
 const app = express();
 
@@ -38,4 +39,31 @@ const db = mysql.createConnection({
           'Exit',
         ],
       })
+    //   .then(response => {
+    //     switch (response.menu) {
+    //     case 'View all departments':
+    //       departmentData();
+    //       break;
+    //   }
+    // });
+    
+    
+
+        .then(response => {
+          if(response.startData === 'View All Departments') {
+              departmentData()
+          }
+      })
+
+
+
     };
+
+    const departmentData = () => {
+        db.query('SELECT * FROM department', function (err, res) {
+          if (err) throw err;
+          console.table(res);
+          accessEmployeeTracker();
+        });
+      };
+
