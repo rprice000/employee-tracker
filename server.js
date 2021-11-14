@@ -2,7 +2,6 @@ const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
-const { type } = require('os');
 
 
 const PORT = process.env.PORT || 3001;
@@ -55,12 +54,12 @@ const db = mysql.createConnection({
              addNewEmployee();
           } else if (response.startData === 'Update Employee Data') {
               updateEmployeeData();
+          } else if (response.startData === 'Exit') {
+              db.end();
+          } else {
+              return ""
           }
         })
-
-
-
-
     };
 
 
@@ -158,10 +157,10 @@ const db = mysql.createConnection({
             {
               name: 'departmentId',
               type: 'input',
-              message: 'What is the department ID?',
-              validate: (addDepartmentID) => {
-                if (isNAN(addDepartmentID)) {
-                    console.log('Please enter a department id.');
+              message: 'What is the department id?',
+              validate: (departmentId) => {
+                if (isNaN(departmentId)) {
+                    console.log('Please enter a valid department id.');
                 } else {
                     return true;
                 }
