@@ -19,7 +19,11 @@ const db = mysql.createConnection({
 
   db.connect(err => {
     if (err) throw err;
-    console.log("Please follow the prompts to access Employee Tracker Data");
+    console.log("***********************************")
+    console.log("*                                 *")
+    console.log("*    EMPLOYEE TRACKER DATABASE    *")
+    console.log("*                                 *")
+    console.log("***********************************")
     accessEmployeeTracker();
   });
 
@@ -88,16 +92,16 @@ const db = mysql.createConnection({
     const employeeList = () => {
         db.query(
             `SELECT employee.id, 
-                      employee.first_name, 
-                      employee.last_name, 
-                      job.title, 
-                      department.department_name AS department,
-                      job.salary, 
-                      CONCAT (manager.first_name, " ", manager.last_name) AS manager
-               FROM employee
-                      LEFT JOIN job ON employee.job_id = job.id
-                      LEFT JOIN department ON job.department_id = department.id
-                      LEFT JOIN employee manager ON employee.manager_id = manager.id`,
+                    employee.first_name, 
+                    employee.last_name, 
+                    job.title, 
+                    department.department_name AS department,
+                    job.salary, 
+                    CONCAT (manager.first_name, " ", manager.last_name) AS manager
+                    FROM employee
+                    LEFT JOIN job ON employee.job_id = job.id
+                    LEFT JOIN department ON job.department_id = department.id
+                    LEFT JOIN employee manager ON employee.manager_id = manager.id`,
           function (err, res) {
             if (err) throw err;
             console.table(res);
@@ -120,7 +124,11 @@ const db = mysql.createConnection({
               [answer.department],
               function (err, res) {
                 if (err) throw err;
-                console.log('New Department added!');
+                console.log("***********************************")
+                console.log("*                                 *")
+                console.log("*      NEW DEPARTMENT ADDED       *")
+                console.log("*                                 *")
+                console.log("***********************************")
                 accessEmployeeTracker();
               }
             );
@@ -174,6 +182,11 @@ const db = mysql.createConnection({
               function (err, res) {
                 if (err) throw err;
                 console.log('New Job Added');
+                console.log("***********************************")
+                console.log("*                                 *")
+                console.log("*          NEW JOB ADDED          *")
+                console.log("*                                 *")
+                console.log("***********************************")
                 accessEmployeeTracker();
               }
             );
@@ -240,16 +253,19 @@ const db = mysql.createConnection({
               function (err, res) {
                 if (err) throw err;
                 console.log('New Employee added!');
+                console.log("***********************************")
+                console.log("*                                 *")
+                console.log("*        NEW EMPLOYEE ADDED       *")
+                console.log("*                                 *")
+                console.log("***********************************")
                 accessEmployeeTracker();
               }
             );
           });
       };
 
-
       const updateEmployeeData = () => {
-        inquirer
-          .prompt([
+        inquirer.prompt([
             {
               name: 'employeeId',
               type: 'input',
@@ -282,6 +298,11 @@ const db = mysql.createConnection({
               function (err, res) {
                 if (err) throw err;
                 console.log('Employee data has been updated!');
+                console.log("***********************************")
+                console.log("*                                 *")
+                console.log("*      EMPLOYEE DATA UPDATED      *")
+                console.log("*                                 *")
+                console.log("***********************************")
                 accessEmployeeTracker();
               }
             );
