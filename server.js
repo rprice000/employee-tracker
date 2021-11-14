@@ -53,6 +53,8 @@ const db = mysql.createConnection({
              addNewJob();
           } else if (response.startData === 'Add New Employee') {
              addNewEmployee();
+          } else if (response.startData === 'Update Employee Data') {
+              updateEmployeeData();
           }
         })
 
@@ -244,3 +246,46 @@ const db = mysql.createConnection({
             );
           });
       };
+
+
+      const updateEmployeeData = () => {
+        inquirer
+          .prompt([
+            {
+              name: 'employeeId',
+              type: 'input',
+              message: 'Provide Employee Id Number',
+              validate: (employeeId) => {
+                if (isNaN(employeeId)) {
+                    console.log('Please enter a valid employee id number.');
+                } else {
+                    return true;
+                }
+              }
+            },
+            {
+              name: 'jobId',
+              type: 'input',
+              message: 'Provide a new job id',
+              validate: (jobID) => {
+                if (isNaN(jobID)) {
+                    console.log('Please enter a valid job id number.');
+                } else {
+                    return true;
+                }
+              }
+            },
+          ])
+          .then(answer => {
+            db.query(
+              'UPDATE employee SET job_id=? WHERE id=?',
+              [answer.jobId, answer.employeeId],
+              function (err, res) {
+                if (err) throw err;
+                console.log('Employee data has been updated!');
+                accessEmployeeTracker();
+              }
+            );
+          });
+      };
+      
