@@ -33,24 +33,26 @@ const db = mysql.createConnection({
           'View All Departments',
           'View All Jobs',
           'View All Employees',
-          'Add Department',
-          'Add Job',
-          'Add Employee',
+          'Add New Department',
+          'Add New Job',
+          'Add New Employee',
           'Update Employee Data',
           'Exit',
         ],
       })
         .then(response => {
           if (response.startData === 'View All Departments') {
-             departmentList()
+             departmentList();
           } else if (response.startData === 'View All Jobs') {
-             jobList()
+             jobList();
           } else if (response.startData === 'View All Employees') {
-             employeeList()
-          } else if (response.startData === 'Add Department') {
-             addDepartment()
-          } else if (response.startData === 'Add Job') {
-             addJob();
+             employeeList();
+          } else if (response.startData === 'Add New Department') {
+             addNewDepartment();
+          } else if (response.startData === 'Add New Job') {
+             addNewJob();
+          } else if (response.startData === 'Add New Employee') {
+             addNewEmployee();
           }
         })
 
@@ -103,7 +105,7 @@ const db = mysql.createConnection({
         );
       };
 
-    const addDepartment = () => {
+    const addNewDepartment = () => {
         inquirer.prompt([
             {
               name: 'department',
@@ -124,7 +126,7 @@ const db = mysql.createConnection({
           });
       }; 
 
-      const addJob = () => {
+      const addNewJob = () => {
         inquirer.prompt([
             {
               name: 'newJob',
@@ -171,6 +173,72 @@ const db = mysql.createConnection({
               function (err, res) {
                 if (err) throw err;
                 console.log('New Job Added');
+                accessEmployeeTracker();
+              }
+            );
+          });
+      };
+
+      const addNewEmployee = () => {
+        inquirer.prompt([
+            {
+              name: 'firstName',
+              type: 'input',
+              message: "Provide the new employee's first name?",
+              validate: firstName => {
+                if (firstName) {
+                    return true;
+                } else {
+                    console.log('Please enter a first name.');
+                    return false;
+                }
+              }
+            },
+            {
+              name: 'lastName',
+              type: 'input',
+              message: "Provide the new employee's last name?",
+              validate: lastName => {
+                if (lastName) {
+                    return true;
+                } else {
+                    console.log('Please enter a last name.');
+                    return false;
+                }
+              }
+            },
+            {
+              name: 'jobId',
+              type: 'input',
+              message: "What is the new employee's job id?",
+              validate: (jobId) => {
+                if (isNaN(jobId)) {
+                    console.log('Please enter a valid id number.');
+                } else {
+                    return true;
+                }
+              }
+            },
+            {
+              name: 'managerId',
+              type: 'input',
+              message: 'What is the manager id of the new employee?',
+              validate: (managerId) => {
+                if (isNaN(managerId)) {
+                    console.log('Please enter a valid manager id number.');
+                } else {
+                    return true;
+                }
+              }
+            },
+          ])
+          .then(answer => {
+            db.query(
+              'INSERT INTO employee (first_name, last_name, job_id, manager_id) VALUES (?, ?, ?, ?)',
+              [answer.firstName, answer.lastName, answer.jobId, answer.managerId],
+              function (err, res) {
+                if (err) throw err;
+                console.log('New Employee added!');
                 accessEmployeeTracker();
               }
             );
