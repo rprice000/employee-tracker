@@ -1,15 +1,18 @@
+// Added Dependencies to application
 const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
 
-
+// Added Port Number for application
 const PORT = process.env.PORT || 3001;
 const app = express();
-
+// Added Express.js middleware
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
+
+// Added connection to MySQL database
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
@@ -17,6 +20,7 @@ const db = mysql.createConnection({
     database: 'employee_tracker_db',
   });
 
+// Displays if user connects to data otherwise gives error
   db.connect(err => {
     if (err) throw err;
     console.log("***********************************")
@@ -27,6 +31,7 @@ const db = mysql.createConnection({
     accessEmployeeTracker();
   });
 
+// Inquirer Prompt to ask user what they want to do to employee_tracker database
   const accessEmployeeTracker = () => {
     inquirer.prompt({
         message: 'From Here You Can View, Add, or Update Employee Data.  Select Exit If You Need to Quit The Application.',
@@ -43,21 +48,29 @@ const db = mysql.createConnection({
           'Exit',
         ],
       })
+// Runs departmentList function if user selects View All Departments
         .then(response => {
           if (response.startData === 'View All Departments') {
              departmentList();
+// Runs jobList function if user selects View All Jobs
           } else if (response.startData === 'View All Jobs') {
              jobList();
+// Runs employeeList function if user selects View All Employees
           } else if (response.startData === 'View All Employees') {
              employeeList();
+// Runs addNewDepartment function if user selects Add New Department
           } else if (response.startData === 'Add New Department') {
              addNewDepartment();
+// Runs addNewJob function if user selects Add New Job
           } else if (response.startData === 'Add New Job') {
              addNewJob();
+// Runs addNewEmployee function if user selects Add New Employee
           } else if (response.startData === 'Add New Employee') {
              addNewEmployee();
+// Runs updateEmployeeData function if user selects Update Employee Data
           } else if (response.startData === 'Update Employee Data') {
               updateEmployeeData();
+// Ends conncection to database if user selects Exit
           } else if (response.startData === 'Exit') {
               db.end();
           } else {
@@ -67,12 +80,7 @@ const db = mysql.createConnection({
     };
 
 
-
-
-
-
-
-
+// Object function displays department table
     const departmentList = () => {
         db.query(`SELECT * FROM department`, function (err, res) {
           if (err) throw err;
@@ -81,6 +89,7 @@ const db = mysql.createConnection({
         });
       };
 
+// Object function displays job table
     const jobList = () => {
         db.query(`SELECT * FROM job`, function (err, res) {
           if (err) throw err;
@@ -89,6 +98,7 @@ const db = mysql.createConnection({
         });
       };
 
+// Object function displays employee table
     const employeeList = () => {
         db.query(
             `SELECT employee.id, 
@@ -110,6 +120,7 @@ const db = mysql.createConnection({
         );
       };
 
+// Object function creates new department and adds to department table
     const addNewDepartment = () => {
         inquirer.prompt([
             {
@@ -135,6 +146,7 @@ const db = mysql.createConnection({
           });
       }; 
 
+// Object function creates new job and adds to job table
       const addNewJob = () => {
         inquirer.prompt([
             {
@@ -193,6 +205,7 @@ const db = mysql.createConnection({
           });
       };
 
+// Object function creates new employee and adds to employee table      
       const addNewEmployee = () => {
         inquirer.prompt([
             {
@@ -264,6 +277,7 @@ const db = mysql.createConnection({
           });
       };
 
+// Object function used to update employee data inside employe table
       const updateEmployeeData = () => {
         inquirer.prompt([
             {
