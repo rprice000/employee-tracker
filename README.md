@@ -36,8 +36,6 @@ This application allows users to easily interact with stored information from an
 - All screenshots are inside the assets folder within the screenshots folder
 -./assets/images/...
 
-![Opening Prompt](https://github.com/rprice000/employee-tracker/blob/main/assets/images/opening_prompt.jpg)
-
 ## Technologies
 - Javascript
 - Node
@@ -55,7 +53,7 @@ There is no testing dependencies for the deployed application
 https://github.com/rprice000/employee-tracker
 
 - Link to Video of Working Application
-
+https://drive.google.com/file/d/1Ks8VXNsC7jL-lShGBDuxCktjQb1gu5qs/view
 
 ## Version
 
