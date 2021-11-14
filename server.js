@@ -2,6 +2,7 @@ const express = require('express');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const cTable = require('console.table');
+const { type } = require('os');
 
 
 const PORT = process.env.PORT || 3001;
@@ -41,13 +42,15 @@ const db = mysql.createConnection({
       })
         .then(response => {
           if (response.startData === 'View All Departments') {
-              departmentList()
+             departmentList()
           } else if (response.startData === 'View All Jobs') {
              jobList()
           } else if (response.startData === 'View All Employees') {
              employeeList()
-          } else if(response.startData === 'Add Department') {
-              addDepartment()
+          } else if (response.startData === 'Add Department') {
+             addDepartment()
+          } else if (response.startData === 'Add Job') {
+             addJob();
           }
         })
 
@@ -71,7 +74,7 @@ const db = mysql.createConnection({
         });
       };
 
-      const jobList = () => {
+    const jobList = () => {
         db.query(`SELECT * FROM job`, function (err, res) {
           if (err) throw err;
           console.table(res);
@@ -79,7 +82,7 @@ const db = mysql.createConnection({
         });
       };
 
-      const employeeList = () => {
+    const employeeList = () => {
         db.query(
             `SELECT employee.id, 
                       employee.first_name, 
@@ -100,5 +103,76 @@ const db = mysql.createConnection({
         );
       };
 
-      
+    const addDepartment = () => {
+        inquirer.prompt([
+            {
+              name: 'department',
+              type: 'input',
+              message: 'What is the name of the new Department?',
+            },
+          ])
+          .then(answer => {
+            db.query(
+              'INSERT INTO department (department_name) VALUES (?)',
+              [answer.department],
+              function (err, res) {
+                if (err) throw err;
+                console.log('New Department added!');
+                accessEmployeeTracker();
+              }
+            );
+          });
+      }; 
 
+      const addJob = () => {
+        inquirer.prompt([
+            {
+              name: 'newJob',
+              type: 'input',
+              message: 'What is the title for the new job?',
+              validate: addJob => {
+                if (addJob) {
+                    return true;
+                } else {
+                    console.log('Please enter a title.');
+                    return false;
+                }
+              }
+            },
+            {
+              name: 'salary',
+              type: 'input',
+              message: 'What is the salary for the new job?',
+              validate: (salary) => {
+                if (isNaN(salary)) {
+                    console.log('Please enter a valid salary.');
+                } else {
+                    return true;
+                }
+              }
+            },
+            {
+              name: 'departmentId',
+              type: 'input',
+              message: 'What is the department ID?',
+              validate: (addDepartmentID) => {
+                if (isNAN(addDepartmentID)) {
+                    console.log('Please enter a department id.');
+                } else {
+                    return true;
+                }
+              }
+            },
+          ])
+          .then(answer => {
+            db.query(
+              'INSERT INTO job (title, salary, department_id) VALUES (?, ?, ?)',
+              [answer.newJob, answer.salary, answer.departmentId],
+              function (err, res) {
+                if (err) throw err;
+                console.log('New Job Added');
+                accessEmployeeTracker();
+              }
+            );
+          });
+      };
