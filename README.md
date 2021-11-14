@@ -36,7 +36,7 @@ This application allows users to easily interact with stored information from an
 - All screenshots are inside the assets folder within the screenshots folder
 -./assets/images/...
 
-![Opening Prompt](https://github.com/rprice000/employee-tracker/blob/main/assets/images/opening_prompt.JPG)
+![Opening Prompt](https://github.com/rprice000/employee-tracker/blob/main/assets/images/opening_prompt.jpg)
 
 ## Technologies
 - Javascript
